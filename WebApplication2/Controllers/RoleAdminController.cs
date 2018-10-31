@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,9 @@ namespace WebApplication2.Controllers
         {
             return View(_roleManager.Roles);
         }
+
+
+        [Authorize(Roles = "管理员")]
         public ActionResult Create()
         {
             return View();
