@@ -22,5 +22,9 @@ namespace WebApplication2.Controllers
         {
             return View(_roleManager.Roles);
         }
+        public ActionResult Create()
+        {
+            return View();
+        }
     }
 }
