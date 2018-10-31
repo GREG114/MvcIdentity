@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebApplication2
 {
@@ -37,9 +38,23 @@ namespace WebApplication2
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                //指定密码长度为6位
+                options.Password.RequiredLength = 6;
+                //是否要求有非字母数字的字符
+                options.Password.RequireNonAlphanumeric = false;
+                //是否要求有大写的ASCII字母
+                options.Password.RequireUppercase = false;
+                //是否要求有小写的ASCII字母
+                options.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
