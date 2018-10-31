@@ -26,5 +26,9 @@ namespace WebApplication2.Controllers
         {
             return View(await _userManager.Users.ToListAsync());
         }
+
+
+
+  
     }
 }
