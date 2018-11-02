@@ -102,6 +102,68 @@ namespace WebApplication2.Controllers
 
 
 
+
+
+        //
+        // GET: /Users/Delete/5
+        public async Task<ActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                throw new ApplicationException();
+            }
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                throw new ApplicationException();
+            }
+            return View(user);
+        }
+
+        //
+        // POST: /Users/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DeleteConfirmed(string id)
+        {
+            if (ModelState.IsValid)
+            {
+                if (id == null)
+                {
+                    throw new ApplicationException();
+                }
+
+                var user = await _userManager.FindByIdAsync(id);
+                if (user == null)
+                {
+                    throw new ApplicationException();
+                }
+                var result = await _userManager.DeleteAsync(user);
+                if (!result.Succeeded)
+                {
+                    AddErrors(result);
+                    return View();
+                }
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+
+        //
+        // GET: /Users/Details/5
+        public async Task<ActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                throw new ApplicationException();
+            }
+            var user = await _userManager.FindByIdAsync(id);
+
+            ViewBag.RoleNames = await _userManager.GetRolesAsync(user);
+
+            return View(user);
+        }
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
